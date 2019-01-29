@@ -46,13 +46,21 @@
 
         
         navigator.mediaDevices.getUserMedia(myConstraints).then(function(mediaStream) {
-        /* use the stream */
-            video.src = window.URL.createObjectURL(mediaStream)
-            video.play()
+            /* use the stream */
+            var video = document.querySelector('video');
+            // 旧的浏览器可能没有srcObject
+            if ("srcObject" in video) {
+                video.srcObject = stream;
+            } else {
+                // 防止在新的浏览器里使用它，应为它已经不再支持了
+                video.src = window.URL.createObjectURL(stream);
+            }
+            video.onloadedmetadata = function(e) {
+                video.play();
+            };
         }).catch(function(err) {
             /* handle the error */
-            alert(err);
-            alert(err.name)
+            alert(err.name + ": " + err.message);
             video.src="https://c1.staticflickr.com/8/7376/16218590470_468084c950_h.jpg"
             video.play()
         });
