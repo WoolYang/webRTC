@@ -18,121 +18,117 @@
     <video id="video" autoplay playsinline ></video>
 </body>
 <script>
-    ;(function(){
+;(function(){
 
-        if(/(iPhone|iPad|iPod|iOS)/i.test(window.navigator.userAgent) && navigator.vender.indexOf("apple") > -1) {
-　　　　    return;
-        }
-
-        //兼容方案
-        if (navigator.mediaDevices === undefined) {
-            navigator.mediaDevices = {};
-        }
-        if (navigator.mediaDevices.getUserMedia === undefined) {
-            navigator.mediaDevices.getUserMedia = function(constraints) {
-                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-                if (!getUserMedia) {
-                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
-                }
-                return new Promise(function(resolve, reject) {
-                    getUserMedia.call(navigator, constraints, resolve, reject);
-                });
+    //getUserMedia兼容
+    if (navigator.mediaDevices === undefined) {
+        navigator.mediaDevices = {};
+    }
+    if (navigator.mediaDevices.getUserMedia === undefined) {
+        navigator.mediaDevices.getUserMedia = function(constraints) {
+            var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+            if (!getUserMedia) {
+                return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
             }
+            return new Promise(function(resolve, reject) {
+                getUserMedia.call(navigator, constraints, resolve, reject);
+            });
         }
+    }
 
-        var video = document.querySelector('video');
+    var video = document.querySelector('video');
 
-        navigator.mediaDevices.enumerateDevices().then(function (sourceInfos) {
-            if (!navigator.mediaDevices.getUserMedia) {
-                var exArray = [];  
-                for (var i = 0; i < sourceInfos.length; ++i) {
-                    if (sourceInfos[i].kind == 'videoinput') {
-                        exArray.push(sourceInfos[i].deviceId);
-                    }
+    navigator.mediaDevices.enumerateDevices().then(function (sourceInfos) {
+        if (!navigator.mediaDevices.getUserMedia) {
+            var exArray = [];  
+            for (var i = 0; i < sourceInfos.length; ++i) {
+                if (sourceInfos[i].kind == 'videoinput') {
+                    exArray.push(sourceInfos[i].deviceId);
                 }
-
-                // 通过navigator的getUserMedia获取摄像头的视频流，并在成功的回调中将视频流交给video
-                getMedia();
-
-                function getMedia() {
-                    if (navigator.getUserMedia) {
-                        // 该方法可以传递3个参数，分别为获取媒体信息的配置，成功的回调函数和失败的回调函数
-                        navigator.getUserMedia({
-                        audio: false, // 表明是否获取音频
-                        video: {  // 对视频信息进行配置
-                            optional: [{
-                            'sourceId': exArray[1] // 下标为0是前置摄像头，1为后置摄像头，所以PC不能进入该判断，否则画面会保持在第一帧不动
-                            }]
-                        },
-                        }, successFunc, errorFunc); //success是获取成功的回调函数  
-                    } else {
-                        alert('Native device media streaming (getUserMedia) not supported in this browser.');
-                    }
-                }
-
-                        // 这里是获取媒体信息成功的回调函数
-                function successFunc(stream) {
-                // 对FireFox进行兼容，这里对返回流数据的处理不同
-                    if (video.mozSrcObject !== undefined) {
-                        //Firefox中，video.mozSrcObject最初为null，而不是未定义的，我们可以靠这个来检测Firefox的支持  
-                        video.mozSrcObject = stream;
-                    } else {
-                        // 一般的浏览器需要使用createObjectURL对流数据进行处理，再交给video元素的src
-                        window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
-                        video.src = window.URL && window.URL.createObjectURL(stream) || stream;
-                    }
-                }
-
-                // 获取媒体信息失败的回调
-                function errorFunc(e) {
-                    alert('Error！' + e);
-                }
-            } else {  // 当采用最新的标准方式获取视频时
-                // 这里对生成视频进行配置
-                var userMediaConstraints = {
-                    audio: false, // 是否获取音频
-                    video: {
-                        facingMode: 'environment'  // 环境表示后置摄像头，使用user表示采用前置
-                    }
-                }
-                // 这里就采用新的方法来获取视频
-                navigator.mediaDevices.getUserMedia(userMediaConstraints).then(function success(stream) {
-                video.srcObject = stream;
-        
-                }).catch(function (error) {
-                alert(error.name + error.message)
-                });
             }
-        }).catch(function(error) {
+
+            // 通过navigator的getUserMedia获取摄像头的视频流，并在成功的回调中将视频流交给video
+            getMedia();
+
+            function getMedia() {
+                if (navigator.getUserMedia) {
+                    // 该方法可以传递3个参数，分别为获取媒体信息的配置，成功的回调函数和失败的回调函数
+                    navigator.getUserMedia({
+                    audio: false, // 表明是否获取音频
+                    video: {  // 对视频信息进行配置
+                        optional: [{
+                        'sourceId': exArray[1] // 下标为0是前置摄像头，1为后置摄像头，所以PC不能进入该判断，否则画面会保持在第一帧不动
+                        }]
+                    },
+                    }, successFunc, errorFunc); //success是获取成功的回调函数  
+                } else {
+                    alert('Native device media streaming (getUserMedia) not supported in this browser.');
+                }
+            }
+
+                    // 这里是获取媒体信息成功的回调函数
+            function successFunc(stream) {
+            // 对FireFox进行兼容，这里对返回流数据的处理不同
+                if (video.mozSrcObject !== undefined) {
+                    //Firefox中，video.mozSrcObject最初为null，而不是未定义的，我们可以靠这个来检测Firefox的支持  
+                    video.mozSrcObject = stream;
+                } else {
+                    // 一般的浏览器需要使用createObjectURL对流数据进行处理，再交给video元素的src
+                    window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
+                    video.src = window.URL && window.URL.createObjectURL(stream) || stream;
+                }
+            }
+
+            // 获取媒体信息失败的回调
+            function errorFunc(e) {
+                alert('Error！' + e);
+            }
+        } else {  // 当采用最新的标准方式获取视频时
+            // 这里对生成视频进行配置
+            var userMediaConstraints = {
+                audio: false, // 是否获取音频
+                video: {
+                    facingMode: 'environment'  // 环境表示后置摄像头，使用user表示采用前置
+                }
+            }
+            // 这里就采用新的方法来获取视频
+            navigator.mediaDevices.getUserMedia(userMediaConstraints).then(function success(stream) {
+            video.srcObject = stream;
+    
+            }).catch(function (error) {
             alert(error.name + error.message)
-        })
-/*         window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
-        
-        var myConstraints = { 
-            audio: false, 
-            video: { 
-                facingMode: "environment"
-            } 
+            });
         }
-        
-        navigator.mediaDevices.getUserMedia(myConstraints).then(function(stream) {
-            var video = document.querySelector('video');
-            // 旧的浏览器可能没有srcObject
-            if ("srcObject" in video) {
-                video.srcObject = stream;
-            } else {
-                // 防止在新的浏览器里使用它，应为它已经不再支持了
-                video.src = window.URL.createObjectURL(stream);
-            }    
+    }).catch(function(error) {
+        alert(error.name + error.message)
+    })
+/*         window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
+    
+    var myConstraints = { 
+        audio: false, 
+        video: { 
+            facingMode: "environment"
+        } 
+    }
+    
+    navigator.mediaDevices.getUserMedia(myConstraints).then(function(stream) {
+        var video = document.querySelector('video');
+        // 旧的浏览器可能没有srcObject
+        if ("srcObject" in video) {
+            video.srcObject = stream;
+        } else {
+            // 防止在新的浏览器里使用它，应为它已经不再支持了
+            video.src = window.URL.createObjectURL(stream);
+        }    
+        video.play();
+        video.onloadedmetadata = function(e) {
             video.play();
-            video.onloadedmetadata = function(e) {
-                video.play();
-            };
-        }).catch(function(err) {
-            alert(err.name + ": " + err.message);
-            video.src="https://c1.staticflickr.com/8/7376/16218590470_468084c950_h.jpg"
-            video.play()
-        }); */
-    })();
+        };
+    }).catch(function(err) {
+        alert(err.name + ": " + err.message);
+        video.src="https://c1.staticflickr.com/8/7376/16218590470_468084c950_h.jpg"
+        video.play()
+    }); */
+})();
 </script>
 </html>
