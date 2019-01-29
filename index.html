@@ -58,7 +58,7 @@
             width: 200px;
             height: 200px;
             transform-style: preserve-3d;
-            transition: transform 1s;
+            transition: transform 0.5s;
             /* animation: example 10s linear infinite; */
         }
 
@@ -234,7 +234,7 @@
     }
 
     //点击动画
-    document.querySelector('.scene').addEventListener('click', function (event) {
+    document.querySelector('.scene').addEventListener('touchend', function (event) {
         var arr = [];
         var num = 0;
         while (num < 100) {
