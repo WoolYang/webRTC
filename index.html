@@ -15,12 +15,14 @@
     </style>
 </head>
 <body>
-    <video id="video"></video>
+    <video id="video" autoplay ></video>
 </body>
     <script>
         const myConstraints = { 
             audio: false, 
-            video: true
+            video: { 
+                facingMode: "environment"
+            } 
         }
 
         //兼容方案
