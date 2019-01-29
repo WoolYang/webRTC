@@ -36,31 +36,16 @@
         }
         window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
 
-        MediaStreamTrack.getSources(function(sourceInfos) {
-            for (var i = 0; i != sourceInfos.length; ++i) {
-                var sourceInfo = sourceInfos[i]; //这里会遍历audio,video，所以要加以区分
-                if (sourceInfo.kind === 'video') { exArray.push(sourceInfo.id); }
-            }
-            if (!navigator.getUserMedia) {alert('不支持 getUserMedia 方法')}
         
-            mediaOpts.video = {
-                optional: [{
-                    sourceId: exArray[1]
-                }]
-            }
-            navigator.getUserMedia(mediaOpts, successFunc, errorFunc);
+        navigator.mediaDevices.getUserMedia(myConstraints).then(function(mediaStream) {
+        /* use the stream */
+            video.src = window.URL.createObjectURL(mediaStream)
+            video.play()
+        }).catch(function(err) {
+            /* handle the error */
+            alter(111);
+            video.src="https://c1.staticflickr.com/8/7376/16218590470_468084c950_h.jpg"
+            video.play()
         });
-       
-        function successFunc(stream) {
-            if (video.mozSrcObject !== undefined) {  
-                video.mozSrcObject = stream;  
-            }else {  
-                video.src = window.URL && window.URL.createObjectURL(stream) || stream;  
-            }  
-        }
-        
-        function errorFunc(){
-
-        }
     </script>
 </html>
