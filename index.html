@@ -58,7 +58,7 @@
             width: 200px;
             height: 200px;
             transform-style: preserve-3d;
-            animation: example 10s linear infinite;
+            /* animation: example 10s linear infinite; */
         }
 
         .side {
@@ -88,19 +88,19 @@
             transform: translateZ(150px);
         }
         .left { 
-            transform: translateX(-100px) rotateY(90deg); 
+            transform: translateX(-150px) rotateY(90deg); 
         } 
         .right { 
-            transform: translateX(100px) rotateY(90deg); 
+            transform: translateX(150px) rotateY(90deg); 
         }
 
         .top, .bottom {
             background-color: rgba(105, 136, 190, 0.5)
         }
 
-        @keyframes example {
+/*         @keyframes example {
         100% { transform: rotateX(360deg); }
-        }
+        } */
     </style>
 </head>
 <body>
