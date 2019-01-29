@@ -34,9 +34,22 @@
             transform: translate(-50%,-50%);
             z-index: 10;
         }
+        .data{
+            display: inline-block;
+            padding: 10px;
+        }
+        .data p{
+            width: 10px;
+            height: 20px;
+        }
     </style>
 </head>
 <body>
+    <div class="data">
+        <p>alpha:<span id="alpha"></span></p>
+        <p>beta:<span id="beta"></span></p>
+        <p>gamma:<span id="gamma"></span></p>
+    </div>
     <img src="./img.gif">
     <video id="video" autoplay playsinline ></video>
 </body>
@@ -126,6 +139,24 @@
         alert(error.name + error.message)
     })
 
+    //图片陀螺仪定位
+    if (window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', function (event) {
+            var a = document.getElementById('alpha');
+            var b = document.getElementById('beta');
+            var g = document.getElementById('gamma');
+            var alpha = event.alpha;
+            var beta = event.beta;
+            var gamma = event.gamma;
+  
+            a.innerHTML = Math.round(alpha);
+            b.innerHTML = Math.round(beta);
+            g.innerHTML = Math.round(gamma);
+  
+        }, false);
+    } else {
+        document.querySelector('body').innerHTML = '你的浏览器不支持陀螺仪';
+    }
 })();
 </script>
 </html>
