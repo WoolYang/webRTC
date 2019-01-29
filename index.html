@@ -51,14 +51,14 @@
             margin: 75px auto 0;
             perspective: 1200px;
             transform: scale(.5);
+            transition: height 2s;
         }
 
         .cube {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 300px;
+            height: 300px;
             transform-style: preserve-3d;
-            transition: transform 0.5s;
             /* animation: example 10s linear infinite; */
         }
 
@@ -124,31 +124,6 @@
     <video id="video" autoplay playsinline ></video>
 </body>
 <script>
-
-(function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-          window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); },
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
 
 ;(function(){
 
@@ -260,8 +235,14 @@
     }
 
     //点击动画
-    document.querySelector('.scene').addEventListener('touchend', function (event) {
-        var arr = [];
+    var scene = document.querySelector('.scene')
+    scene.addEventListener('touchend', function (event) {
+        
+        scene.style.height='1000px';
+        setTimeout(()=>{
+            scene.style.height='300px';
+        },1000)
+/*         var arr = [];
         var num = 0;
         while (num < 100) {
             var n = Math.floor(Math.random()*1000)+1
@@ -275,7 +256,8 @@
                 cube.style.transform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)'; 
                 cube.style.mozTransform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)';
             })
-        })
+        }) */
+        console.log(111)
     })
 })();
 </script>
