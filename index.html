@@ -59,7 +59,6 @@
             width: 300px;
             height: 300px;
             transform-style: preserve-3d;
-            /* animation: example 10s linear infinite; */
         }
 
         .side {
@@ -99,9 +98,6 @@
             background-color: rgba(105, 136, 190, 0.5)
         }
 
-/*         @keyframes example {
-        100% { transform: rotateX(360deg); }
-        } */
     </style>
 </head>
 <body>
@@ -238,26 +234,10 @@
     var scene = document.querySelector('.scene')
     scene.addEventListener('touchend', function (event) {
         
-        scene.style.height='1000px';
+        scene.style.height='1400px';
         setTimeout(()=>{
             scene.style.height='300px';
         },1000)
-/*         var arr = [];
-        var num = 0;
-        while (num < 100) {
-            var n = Math.floor(Math.random()*1000)+1
-            arr[num] = n
-            num ++
-        }
-
-        arr.map(item=>{
-            window.requestAnimationFrame(function(){
-                cube.style.webkitTransform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)'; 
-                cube.style.transform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)'; 
-                cube.style.mozTransform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)';
-            })
-        }) */
-        console.log(111)
     })
 })();
 </script>
