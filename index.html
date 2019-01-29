@@ -58,6 +58,7 @@
             width: 200px;
             height: 200px;
             transform-style: preserve-3d;
+            transition: transform 1s;
             /* animation: example 10s linear infinite; */
         }
 
@@ -231,6 +232,25 @@
     } else {
         document.querySelector('body').innerHTML = '你的浏览器不支持陀螺仪';
     }
+
+    //点击动画
+    document.querySelector('.scene').addEventListener('click', function (event) {
+        var arr = [];
+        var num = 0;
+        while (num < 100) {
+            var n = Math.floor(Math.random()*1000)+1
+            arr[num] = n
+            num ++
+        }
+
+        arr.map(item=>{
+            window.requestAnimationFrame(function(){
+                cube.style.webkitTransform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)'; 
+                cube.style.transform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)'; 
+                cube.style.mozTransform = 'rotateX(' + item + 'deg) rotateY(' + item + 'deg) rotateZ(' + item + 'deg)';
+            })
+        })
+    })
 })();
 </script>
 </html>
