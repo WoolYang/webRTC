@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AR Document</title>
+</head>
+<body>
+    <video id="video"></video>
+</body>
+    <script>
+        const myConstraints = { 
+            audio: true, 
+            video: { 
+                facingMode: { 
+                    exact: "environment" 
+                } 
+            } 
+        }
+
+        navigator.mediaDevices.getUserMedia(myConstraints).then(function(mediaStream) {
+        /* use the stream */
+            video.src = window.URL.createObjectURL(mediaStream)
+            video.play()
+        }).catch(function(err) {
+            /* handle the error */
+            video.src="https://c1.staticflickr.com/8/7376/16218590470_468084c950_h.jpg"
+            video.play()
+        });
+    </script>
+</html>
