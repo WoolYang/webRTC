@@ -43,9 +43,8 @@
             }
         }
         window.URL = (window.URL || window.webkitURL || window.mozURL || window.msURL);
-
         
-        navigator.mediaDevices.getUserMedia(myConstraints).then(function(mediaStream) {
+        navigator.mediaDevices.getUserMedia(myConstraints).then(function(stream) {
             /* use the stream */
             var video = document.querySelector('video');
             // 旧的浏览器可能没有srcObject
